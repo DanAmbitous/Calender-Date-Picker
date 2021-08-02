@@ -39,14 +39,14 @@ function setDate(date) {
 }
 
 function setupDatePicker(selectedDate) {
-  calenderTextHeader.innerText = format(selectedDate, "MMMM - y")
+  calenderTextHeader.innerText = format(currentDate, "MMMM - y")
 
   setupDates(selectedDate)
 }
 
 function setupDates(selectedDate) {
-  const firstDayOfWeek = startOfWeek(startOfMonth(selectedDate))
-  const lastDayOfWeek = endOfWeek(endOfMonth(selectedDate))
+  const firstDayOfWeek = startOfWeek(startOfMonth(currentDate))
+  const lastDayOfWeek = endOfWeek(endOfMonth(currentDate))
 
   const dates = eachDayOfInterval({ start: firstDayOfWeek, end: lastDayOfWeek })
 
@@ -57,23 +57,35 @@ function setupDates(selectedDate) {
     element.classList.add("date")
     element.innerText = date.getDate()
 
-    if (!isSameMonth(date, selectedDate)) {
+    if (!isSameMonth(date, currentDate)) {
       element.classList.add("date-picker-other-month-date")
     }
+
+    if (isSameDay(date, selectedDate)) {
+      element.classList.add("selected")
+    }
+
+    element.addEventListener("click", () => {
+      setDate(date)
+      calenderElement.classList.remove("show")
+    })
 
     calenderGrid.append(element)
   })
 }
 
 nextMonthButton.addEventListener("click", () => {
+  const selectedDate = fromUnixTime(datePickerButton.dataset.selectedDate)
   currentDate = addMonths(currentDate, 1)
-
-  setupDatePicker(currentDate)
+  console.log(selectedDate)
+  setupDatePicker(selectedDate)
 })
 previousMonthButton.addEventListener("click", () => {
+  const selectedDate = fromUnixTime(datePickerButton.dataset.selectedDate)
   currentDate = subMonths(currentDate, 1)
+  console.log(selectedDate)
 
-  setupDatePicker(currentDate)
+  setupDatePicker(selectedDate)
 })
 
 setDate(new Date())
