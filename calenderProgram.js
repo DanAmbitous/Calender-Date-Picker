@@ -36,6 +36,12 @@ datePickerButton.addEventListener("click", () => {
 function setDate(date) {
   datePickerButton.innerText = format(date, "MMMM do, y")
   datePickerButton.dataset.selectedDate = getUnixTime(date)
+
+  const selectedDate = fromUnixTime(datePickerButton.dataset.selectedDate)
+
+  currentDate = selectedDate
+
+  setupDatePicker(selectedDate)
 }
 
 function setupDatePicker(selectedDate) {
@@ -67,7 +73,8 @@ function setupDates(selectedDate) {
 
     element.addEventListener("click", () => {
       setDate(date)
-      calenderElement.classList.remove("show")
+      const selectedDate = fromUnixTime(datePickerButton.dataset.selectedDate)
+      setupDatePicker(selectedDate)
     })
 
     calenderGrid.append(element)
@@ -77,13 +84,11 @@ function setupDates(selectedDate) {
 nextMonthButton.addEventListener("click", () => {
   const selectedDate = fromUnixTime(datePickerButton.dataset.selectedDate)
   currentDate = addMonths(currentDate, 1)
-  console.log(selectedDate)
   setupDatePicker(selectedDate)
 })
 previousMonthButton.addEventListener("click", () => {
   const selectedDate = fromUnixTime(datePickerButton.dataset.selectedDate)
   currentDate = subMonths(currentDate, 1)
-  console.log(selectedDate)
 
   setupDatePicker(selectedDate)
 })
